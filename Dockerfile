@@ -19,8 +19,6 @@ RUN --mount=target=/build,source=build \
 RUN --mount=target=/build,source=build \
     /build/run.sh setup-user
 
-COPY --chmod=644 files/sudoers* /etc/sudoers.d
-
 EXPOSE 25565
 
 ARG APPS_REV=1
@@ -50,7 +48,7 @@ RUN easy-add --var os=${TARGETOS} --var arch=${TARGETARCH}${TARGETVARIANT} \
   --var version=${MC_SERVER_RUNNER_VERSION} --var app=mc-server-runner --file {{.app}} \
   --from ${GITHUB_BASEURL}/itzg/{{.app}}/releases/download/{{.version}}/{{.app}}_{{.version}}_{{.os}}_{{.arch}}.tar.gz
 
-ARG MC_HELPER_VERSION=1.41.9
+ARG MC_HELPER_VERSION=1.42.1
 ARG MC_HELPER_BASE_URL=${GITHUB_BASEURL}/itzg/mc-image-helper/releases/download/${MC_HELPER_VERSION}
 # used for cache busting local copy of mc-image-helper
 ARG MC_HELPER_REV=1
@@ -69,7 +67,7 @@ ENV TYPE=VANILLA VERSION=LATEST EULA="" UID=1000 GID=1000 LC_ALL=en_US.UTF-8
 COPY --chmod=755 scripts/start* /
 COPY --chmod=755 bin/ /usr/local/bin/
 COPY --chmod=755 bin/mc-health /health.sh
-COPY --chmod=644 files/* /image/
+COPY --chmod=755 files/* /image/
 COPY --chmod=755 files/auto /auto
 
 RUN curl -fsSL -o /image/Log4jPatcher.jar https://github.com/CreeperHost/Log4jPatcher/releases/download/v1.0.1/Log4jPatcher-1.0.1.jar
